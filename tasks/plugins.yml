@@ -11,6 +11,7 @@
   action: command java -jar {{ jenkins.cli_dest }} -s http://localhost:8080 install-plugin {{ item }}
   when: plugins_installed.changed and plugins_installed.stdout.find('{{ item }}') == -1
   with_items: plugins
+  register: installed_plugins
   notify:
     - 'Restart Jenkins'
 
