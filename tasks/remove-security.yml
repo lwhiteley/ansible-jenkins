@@ -13,7 +13,7 @@
 - name: Restarting jenkins service
   sudo: yes
   shell: "service jenkins restart"
-  when: "disable_security.stdout.find('process success') == -1 or jenkins_install.changed"
+  when: "disable_security.stdout.find('process success') != -1 or jenkins_install.changed"
   register: restart_jenkins_service
 
 # Wait for jenkins to start
