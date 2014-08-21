@@ -3,7 +3,7 @@
 # set useSecurity to false
 - name: Disable Jenkins Security
   sudo: yes
-  shell: "groovy /home/vagrant/tmp/script/remove-security.groovy"
+  shell: "groovy /home/vagrant/tmp/script/remove-security.groovy -n useSecurity -v false /var/lib/jenkins/config.xml"
   when: ansible_distribution in [ 'Debian', 'Ubuntu' ]
   register: disable_security
 
