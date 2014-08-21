@@ -1,0 +1,22 @@
+---
+# remove security from jenkins
+# set useSecurity to false
+- name: set useSecurity to false
+  sudo: yes
+  shell: "groovy /home/vagrant/tmp/script/remove-security.groovy"
+  when: ansible_distribution in [ 'Debian', 'Ubuntu' ]
+  register: disable_security
+
+- debug: var=disable_security.stdout_lines
+
+#Restart jenkins service
+- name: Restarting jenkins service
+  sudo: yes
+  shell: "service jenkins restart"
+  when: "disable_security.stdout.find('process success') == -1 or jenkins_install.changed"
+  register: restart_jenkins_service
+
+# Wait for jenkins to start
+- name: "{{ startup_delay_s | default(80) }}s delay while starting Jenkins"
+  wait_for: port=8080 delay={{ startup_delay_s | default(80) }}
+  when: restart_jenkins_service.changed
