@@ -9,7 +9,9 @@
 
 - debug: var=disable_security.stdout_lines
 
-#Restart jenkins service
+# Restart jenkins service if security was turned off 
+# or a new version of jenkins was installed
+# to get the latest jenkins-cli.jar
 - name: Restarting jenkins service
   sudo: yes
   shell: "service jenkins restart"
