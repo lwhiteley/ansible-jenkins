@@ -3,7 +3,7 @@
 # set useSecurity to false
 - name: Disable Jenkins Security
   sudo: yes
-  shell: "groovy /home/vagrant/tmp/script/remove-security.groovy -n useSecurity -v false /var/lib/jenkins/config.xml"
+  shell: "groovy {{ remote_tmp_folder }}/script/remove-security.groovy -n useSecurity -v false {{ jenkins_home }}/config.xml"
   when: ansible_distribution in [ 'Debian', 'Ubuntu' ]
   register: disable_security
 
@@ -13,7 +13,7 @@
 - name: Restarting jenkins service
   sudo: yes
   shell: "service jenkins restart"
-  when: "disable_security.stdout.find('process success') != -1 or jenkins_install.changed"
+  when: "disable_security.stdout.find('Value Before => [useSecurity[attributes={}; value=[true]]]') != -1 or jenkins_install.changed"
   register: restart_jenkins_service
 
 # Wait for jenkins to start
